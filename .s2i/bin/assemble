@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+
+echo "🔧 Custom assemble: Preparing static site content..."
+
+APP_ROOT=/opt/app-root
+DEPLOY_DIR="${APP_ROOT}/src"
+HEADER="${APP_ROOT}/header.html"
+FOOTER="${APP_ROOT}/footer.html"
+
+mkdir -p "$DEPLOY_DIR"
+cp /tmp/src/header.html "$HEADER"
+cp /tmp/src/footer.html "$FOOTER"
+
+# Process only .html and .css files
+find /tmp/src -type f \( -name "*.html" -o -name "*.css" \) | while read file; do
+  fname=$(basename "$file")
+  dest="${DEPLOY_DIR}/${fname}"
+
+  if [[ "$file" == *.html ]]; then
+    echo "📝 Wrapping $fname with header/footer"
+    {
+      cat "$HEADER"
+      cat "$file"
+      cat "$FOOTER"
+    } > "$dest"
+  else
+    cp "$file" "$dest"
+  fi
+done
