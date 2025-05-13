@@ -3,6 +3,6 @@ set -e
 
 echo "🚀 Starting Apache HTTP Server with custom config..."
 
-LOG_DIR=/var/log/httpd
+LOG_DIR=/tmp/httpd-logs
 mkdir -p "$LOG_DIR"
 exec httpd -DFOREGROUND -e info >> "$LOG_DIR/custom.log" 2>&1
